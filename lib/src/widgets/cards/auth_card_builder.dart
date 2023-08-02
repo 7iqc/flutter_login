@@ -53,7 +53,7 @@ class AuthCard extends StatefulWidget {
     required this.confirmSignupKeyboardType,
     this.introWidget,
     required this.initialIsoCode,
-    
+    required this.intlPhoneSelectorType,
   });
 
   final EdgeInsets padding;
@@ -79,7 +79,7 @@ class AuthCard extends StatefulWidget {
   final TextInputType? confirmSignupKeyboardType;
   final Widget? introWidget;
   final String? initialIsoCode;
-  
+  final IntlPhoneSelectorType intlPhoneSelectorType;
 
   @override
   AuthCardState createState() => AuthCardState();
@@ -378,8 +378,8 @@ class AuthCardState extends State<AuthCard> with TickerProviderStateMixin {
             loginAfterSignUp: widget.loginAfterSignUp,
             hideProvidersTitle: widget.hideProvidersTitle,
             introWidget: widget.introWidget,
-            
             initialIsoCode: widget.initialIsoCode,
+            intlPhoneSelectorType: widget.intlPhoneSelectorType,
           ),
         );
       case _recoveryIndex:
@@ -397,8 +397,8 @@ class AuthCardState extends State<AuthCard> with TickerProviderStateMixin {
               _changeCard(_loginPageIndex);
             }
           },
-          
           initialIsoCode: widget.initialIsoCode,
+          intlPhoneSelectorType: widget.intlPhoneSelectorType,
         );
 
       case _additionalSignUpIndex:
@@ -428,8 +428,8 @@ class AuthCardState extends State<AuthCard> with TickerProviderStateMixin {
                 _changeCard(_loginPageIndex);
               }
             },
-            
             initialIsoCode: widget.initialIsoCode,
+            intlPhoneSelectorType: widget.intlPhoneSelectorType,
           ),
         );
 
@@ -439,8 +439,8 @@ class AuthCardState extends State<AuthCard> with TickerProviderStateMixin {
           passwordValidator: widget.passwordValidator!,
           onBack: () => _changeCard(_loginPageIndex),
           onSubmitCompleted: () => _changeCard(_loginPageIndex),
-          
           initialIsoCode: widget.initialIsoCode,
+          intlPhoneSelectorType: widget.intlPhoneSelectorType,
         );
 
       case _confirmSignup:
@@ -463,8 +463,8 @@ class AuthCardState extends State<AuthCard> with TickerProviderStateMixin {
             },
             loginAfterSignUp: widget.loginAfterSignUp,
             keyboardType: widget.confirmSignupKeyboardType,
-            
             initialIsoCode: widget.initialIsoCode,
+            intlPhoneSelectorType: widget.intlPhoneSelectorType,
           ),
         );
     }

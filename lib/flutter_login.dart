@@ -8,6 +8,7 @@ import 'package:flutter/scheduler.dart' show timeDilation;
 import 'package:flutter_login/src/color_helper.dart';
 import 'package:flutter_login/src/constants.dart';
 import 'package:flutter_login/src/dart_helper.dart';
+import 'package:flutter_login/src/models/intl_phone_selector_type.dart';
 import 'package:flutter_login/src/models/login_user_type.dart';
 import 'package:flutter_login/src/models/term_of_service.dart';
 import 'package:flutter_login/src/models/user_form_field.dart';
@@ -25,6 +26,7 @@ import 'package:sign_in_button/sign_in_button.dart';
 
 export 'package:sign_in_button/src/button_list.dart';
 
+export 'src/models/intl_phone_selector_type.dart';
 export 'src/models/login_data.dart';
 export 'src/models/login_user_type.dart';
 export 'src/models/signup_data.dart';
@@ -305,6 +307,7 @@ class FlutterLogin extends StatefulWidget {
     this.headerWidget,
     this.onSwitchToAdditionalFields,
     this.initialIsoCode,
+    this.intlPhoneSelectorType = IntlPhoneSelectorType.dialog,
   })  : assert((logo is String?) || (logo is ImageProvider?)),
         logo = logo is String ? AssetImage(logo) : logo as ImageProvider?;
 
@@ -450,6 +453,11 @@ class FlutterLogin extends StatefulWidget {
   /// The initial Iso Code for the widget to show using [LoginUserType.intlPhone].
   /// if not specified. This field will show ['US'] by default.
   final String? initialIsoCode;
+
+  /// Sets [IntlPhoneSelectorType] of intl sign up country code selecter.
+  ///
+  /// Defaults to [IntlPhoneSelectorType.DIALOG].
+  final IntlPhoneSelectorType intlPhoneSelectorType;
 
   static String? defaultEmailValidator(String? value) {
     if (value == null || value.isEmpty || !Regex.email.hasMatch(value)) {
@@ -843,8 +851,8 @@ class _FlutterLoginState extends State<FlutterLogin>
                         confirmSignupKeyboardType:
                             widget.confirmSignupKeyboardType,
                         introWidget: widget.headerWidget,
-                        
                         initialIsoCode: widget.initialIsoCode,
+                        intlPhoneSelectorType: widget.intlPhoneSelectorType,
                       ),
                     ),
                     Positioned(

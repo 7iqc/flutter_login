@@ -55,7 +55,7 @@ class AnimatedTextFormField extends StatefulWidget {
     this.autofillHints,
     this.tooltip,
     required this.initialIsoCode,
-    
+    required this.intlPhoneSelectorType,
   }) : assert(
           (inertiaController == null && inertiaDirection == null) ||
               (inertiaController != null && inertiaDirection != null),
@@ -85,7 +85,7 @@ class AnimatedTextFormField extends StatefulWidget {
   final TextFieldInertiaDirection? inertiaDirection;
   final InlineSpan? tooltip;
   final String? initialIsoCode;
-  
+  final IntlPhoneSelectorType intlPhoneSelectorType;
 
   @override
   State<AnimatedTextFormField> createState() => _AnimatedTextFormFieldState();
@@ -269,6 +269,19 @@ class _AnimatedTextFormFieldState extends State<AnimatedTextFormField> {
     );
   }
 
+  PhoneInputSelectorType _intlPhoneSelectorType() {
+    switch (widget.intlPhoneSelectorType) {
+      case IntlPhoneSelectorType.dialog:
+        return PhoneInputSelectorType.DIALOG;
+      case IntlPhoneSelectorType.bottomSheet:
+        return PhoneInputSelectorType.BOTTOM_SHEET;
+      case IntlPhoneSelectorType.dropDown:
+        return PhoneInputSelectorType.DROPDOWN;
+      default:
+        return PhoneInputSelectorType.DIALOG;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -318,7 +331,7 @@ class _AnimatedTextFormFieldState extends State<AnimatedTextFormField> {
           textFieldController: _phoneNumberController,
           isEnabled: widget.enabled,
           selectorConfig: SelectorConfig(
-            selectorType: PhoneInputSelectorType.DIALOG,
+            selectorType: _intlPhoneSelectorType(),
             trailingSpace: false,
             countryComparator: (c1, c2) =>
                 int.parse(c1.dialCode!.substring(1)).compareTo(
@@ -462,7 +475,7 @@ class AnimatedPasswordTextFormField extends StatefulWidget {
     this.onSaved,
     this.autofillHints,
     required this.initialIsoCode,
-    
+    required this.intlPhoneSelectorType,
   }) : assert(
           (inertiaController == null && inertiaDirection == null) ||
               (inertiaController != null && inertiaDirection != null),
@@ -484,7 +497,7 @@ class AnimatedPasswordTextFormField extends StatefulWidget {
   final TextFieldInertiaDirection? inertiaDirection;
   final Iterable<String>? autofillHints;
   final String? initialIsoCode;
-  
+  final IntlPhoneSelectorType intlPhoneSelectorType;
 
   @override
   State<AnimatedPasswordTextFormField> createState() =>
@@ -545,6 +558,7 @@ class _AnimatedPasswordTextFormFieldState
       onSaved: widget.onSaved,
       inertiaDirection: widget.inertiaDirection,
       initialIsoCode: widget.initialIsoCode,
+      intlPhoneSelectorType: widget.intlPhoneSelectorType,
     );
   }
 }
