@@ -198,7 +198,7 @@ class _AnimatedTextFormFieldState extends State<AnimatedTextFormField> {
     final loadingController = widget.loadingController!;
 
     sizeAnimation = Tween<double>(
-      begin: 48.0,
+      begin: widget.userType == LoginUserType.intlPhone ? 93.0 : 48.0,
       end: widget.width,
     ).animate(
       CurvedAnimation(
