@@ -448,9 +448,10 @@ class AuthCardState extends State<AuthCard> with TickerProviderStateMixin {
           theme: Theme.of(context),
           child: _ConfirmSignupCard(
             key: _confirmSignUpCardKey,
-            onBack: () => auth.additionalSignupData == null
+            onBackButtonTapped: () => auth.additionalSignupData == null
                 ? _changeCard(_loginPageIndex)
                 : _changeCard(_additionalSignUpIndex),
+            onBack: () => _changeCard(_loginPageIndex),
             loadingController: formController,
             onSubmitCompleted: () {
               if (widget.loginAfterSignUp) {

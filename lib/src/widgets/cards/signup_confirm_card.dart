@@ -4,6 +4,7 @@ class _ConfirmSignupCard extends StatefulWidget {
   const _ConfirmSignupCard({
     super.key,
     required this.onBack,
+    required this.onBackButtonTapped,
     required this.onSubmitCompleted,
     this.loginAfterSignUp = true,
     required this.loadingController,
@@ -14,6 +15,7 @@ class _ConfirmSignupCard extends StatefulWidget {
 
   final bool loginAfterSignUp;
   final VoidCallback onBack;
+  final VoidCallback onBackButtonTapped;
   final VoidCallback onSubmitCompleted;
   final AnimationController loadingController;
   final TextInputType? keyboardType;
@@ -178,7 +180,7 @@ class _ConfirmSignupCardState extends State<_ConfirmSignupCard>
     return ScaleTransition(
       scale: widget.loadingController,
       child: MaterialButton(
-        onPressed: !_isSubmitting ? widget.onBack : null,
+        onPressed: !_isSubmitting ? widget.onBackButtonTapped : null,
         padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 4),
         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
         textColor: theme.primaryColor,
