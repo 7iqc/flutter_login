@@ -287,60 +287,59 @@ class _AnimatedTextFormFieldState extends State<AnimatedTextFormField> {
     final theme = Theme.of(context);
     Widget inputField;
     if (widget.userType == LoginUserType.intlPhone) {
-      inputField = Padding(
-        padding: const EdgeInsets.only(left: 8),
-        child: InternationalPhoneNumberInput(
-          cursorColor: theme.primaryColor,
-          focusNode: widget.focusNode,
-          inputDecoration: _getInputDecoration(theme),
-          searchBoxDecoration: const InputDecoration(
-            contentPadding: EdgeInsets.only(left: 20),
-            labelText: 'Search by country name or dial code',
-          ),
-          keyboardType: widget.keyboardType ?? TextInputType.phone,
-          onFieldSubmitted: widget.onFieldSubmitted,
-          onSaved: (phoneNumber) {
-            if (phoneNumber.phoneNumber == phoneNumber.dialCode) {
-              widget.controller?.text = '';
-            } else {
-              widget.controller?.text = phoneNumber.phoneNumber ?? '';
-            }
-            _phoneNumberController.selection = TextSelection.collapsed(
-              offset: _phoneNumberController.text.length,
-            );
-            widget.onSaved?.call(phoneNumber.phoneNumber);
-          },
-          validator: widget.validator,
-          autofillHints: widget.autofillHints,
-          onInputChanged: (phoneNumber) {
-            if (phoneNumber.phoneNumber != null &&
-                phoneNumber.dialCode != null &&
-                phoneNumber.phoneNumber!.startsWith('+')) {
-              _phoneNumberController.text =
-                  _phoneNumberController.text.replaceAll(
-                RegExp(
-                  '^([\\+]${phoneNumber.dialCode!.replaceAll('+', '')}[\\s]?)',
-                ),
-                '',
-              );
-            }
-            _phoneNumberController.selection = TextSelection.collapsed(
-              offset: _phoneNumberController.text.length,
-            );
-          },
-          textFieldController: _phoneNumberController,
-          isEnabled: widget.enabled,
-          selectorConfig: SelectorConfig(
-            selectorType: _intlPhoneSelectorType(),
-            trailingSpace: false,
-            countryComparator: (c1, c2) =>
-                int.parse(c1.dialCode!.substring(1)).compareTo(
-              int.parse(c2.dialCode!.substring(1)),
-            ),
-          ),
-          spaceBetweenSelectorAndTextField: 0,
-          initialValue: _phoneNumberInitialValue,
+      inputField = InternationalPhoneNumberInput(
+        cursorColor: theme.primaryColor,
+        focusNode: widget.focusNode,
+        inputDecoration: _getInputDecoration(theme),
+        searchBoxDecoration: const InputDecoration(
+          contentPadding: EdgeInsets.only(left: 20),
+          labelText: 'Search by country name or dial code',
         ),
+        keyboardType: widget.keyboardType ?? TextInputType.phone,
+        onFieldSubmitted: widget.onFieldSubmitted,
+        onSaved: (phoneNumber) {
+          if (phoneNumber.phoneNumber == phoneNumber.dialCode) {
+            widget.controller?.text = '';
+          } else {
+            widget.controller?.text = phoneNumber.phoneNumber ?? '';
+          }
+          _phoneNumberController.selection = TextSelection.collapsed(
+            offset: _phoneNumberController.text.length,
+          );
+          widget.onSaved?.call(phoneNumber.phoneNumber);
+        },
+        validator: widget.validator,
+        autofillHints: widget.autofillHints,
+        onInputChanged: (phoneNumber) {
+          if (phoneNumber.phoneNumber != null &&
+              phoneNumber.dialCode != null &&
+              phoneNumber.phoneNumber!.startsWith('+')) {
+            _phoneNumberController.text =
+                _phoneNumberController.text.replaceAll(
+              RegExp(
+                '^([\\+]${phoneNumber.dialCode!.replaceAll('+', '')}[\\s]?)',
+              ),
+              '',
+            );
+          }
+          _phoneNumberController.selection = TextSelection.collapsed(
+            offset: _phoneNumberController.text.length,
+          );
+        },
+        textFieldController: _phoneNumberController,
+        isEnabled: widget.enabled,
+        selectorConfig: SelectorConfig(
+          selectorType: _intlPhoneSelectorType(),
+          trailingSpace: false,
+          setSelectorButtonAsPrefixIcon: true,
+          leadingPadding: 10,
+          countryComparator: (c1, c2) =>
+              int.parse(c1.dialCode!.substring(1)).compareTo(
+            int.parse(c2.dialCode!.substring(1)),
+          ),
+        ),
+        spaceBetweenSelectorAndTextField: 0,
+        initialValue: _phoneNumberInitialValue,
       );
     } else if (widget.userType == LoginUserType.checkbox) {
       inputField = CheckboxFormField(
