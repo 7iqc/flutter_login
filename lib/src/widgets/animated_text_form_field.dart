@@ -331,6 +331,7 @@ class _AnimatedTextFormFieldState extends State<AnimatedTextFormField> {
         selectorConfig: SelectorConfig(
           selectorType: _intlPhoneSelectorType(),
           trailingSpace: false,
+          useEmoji: true,
           setSelectorButtonAsPrefixIcon: true,
           leadingPadding: 10,
           countryComparator: (c1, c2) =>
