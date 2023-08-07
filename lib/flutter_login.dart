@@ -308,6 +308,7 @@ class FlutterLogin extends StatefulWidget {
     this.onSwitchToAdditionalFields,
     this.initialIsoCode,
     this.intlPhoneSelectorType = IntlPhoneSelectorType.dialog,
+    this.isKeyboardVisible = false,
   })  : assert((logo is String?) || (logo is ImageProvider?)),
         logo = logo is String ? AssetImage(logo) : logo as ImageProvider?;
 
@@ -458,6 +459,10 @@ class FlutterLogin extends StatefulWidget {
   ///
   /// Defaults to [IntlPhoneSelectorType.DIALOG].
   final IntlPhoneSelectorType intlPhoneSelectorType;
+
+  /// If set to true, make the login window scrollable by adding bottom padding when keyboard is visible only
+  /// Default: false
+  final bool isKeyboardVisible;
 
   static String? defaultEmailValidator(String? value) {
     if (value == null || value.isEmpty || !Regex.email.hasMatch(value)) {
@@ -820,6 +825,9 @@ class _FlutterLoginState extends State<FlutterLogin>
               ],
             ),
             SingleChildScrollView(
+              padding: EdgeInsets.only(
+                bottom: widget.isKeyboardVisible ? 200 : 0,
+              ),
               child: Theme(
                 data: theme,
                 child: Stack(
