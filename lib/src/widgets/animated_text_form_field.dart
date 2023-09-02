@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
@@ -198,7 +199,7 @@ class _AnimatedTextFormFieldState extends State<AnimatedTextFormField> {
     final loadingController = widget.loadingController!;
 
     sizeAnimation = Tween<double>(
-      begin: widget.userType == LoginUserType.intlPhone ? 93.0 : 48.0,
+      begin: widget.userType == LoginUserType.intlPhone ? 95.0 : 48.0,
       end: widget.width,
     ).animate(
       CurvedAnimation(
@@ -371,7 +372,7 @@ class _AnimatedTextFormFieldState extends State<AnimatedTextFormField> {
                         color: Theme.of(context).textTheme.bodyMedium!.color,
                         size: Theme.of(context).textTheme.bodyMedium!.fontSize,
                       ),
-                    )
+                    ),
                   ],
                 ),
               )
@@ -380,6 +381,67 @@ class _AnimatedTextFormFieldState extends State<AnimatedTextFormField> {
                 style: Theme.of(context).textTheme.bodyMedium,
                 textAlign: TextAlign.left,
               ),
+      );
+    } else if (widget.userType == LoginUserType.gender) {
+      final List<String> gender = ['Male', 'Female'];
+      inputField = GestureDetector(
+        onTap: () => showCupertinoModalPopup(
+          context: context,
+          builder: (context) => Container(
+            height: 216,
+            padding: const EdgeInsets.only(top: 6.0),
+            margin: EdgeInsets.only(
+              bottom: MediaQuery.of(context).viewInsets.bottom,
+            ),
+            decoration: BoxDecoration(
+              color: CupertinoColors.systemBackground.resolveFrom(context),
+              borderRadius:
+                  const BorderRadius.vertical(top: Radius.circular(12)),
+            ),
+            child: SafeArea(
+              top: false,
+              child: CupertinoPicker(
+                magnification: 1.22,
+                squeeze: 1.2,
+                useMagnifier: true,
+                itemExtent: 24,
+                scrollController: FixedExtentScrollController(
+                  initialItem: gender.indexWhere(
+                    (element) => element == widget.controller?.text,
+                  ),
+                ),
+                onSelectedItemChanged: (int selectedItem) {
+                  setState(() {
+                    widget.controller?.text = gender[selectedItem];
+                  });
+                },
+                children: List<Widget>.generate(gender.length, (int index) {
+                  return Center(
+                    child: Text(
+                      gender[index],
+                      style: const TextStyle(fontSize: 18),
+                    ),
+                  );
+                }),
+              ),
+            ),
+          ),
+        ),
+        child: TextFormField(
+          cursorColor: theme.primaryColor,
+          controller: widget.controller,
+          focusNode: widget.focusNode,
+          decoration: _getInputDecoration(theme),
+          keyboardType: widget.keyboardType,
+          textInputAction: widget.textInputAction,
+          obscureText: widget.obscureText,
+          onFieldSubmitted: widget.onFieldSubmitted,
+          onSaved: widget.onSaved,
+          validator: widget.validator,
+          enabled: false,
+          autocorrect: widget.autocorrect,
+          autofillHints: widget.autofillHints,
+        ),
       );
     } else {
       inputField = TextFormField(
@@ -421,7 +483,7 @@ class _AnimatedTextFormFieldState extends State<AnimatedTextFormField> {
             color: theme.primaryColor,
             iconSize: 28,
             icon: const Icon(Icons.info),
-          )
+          ),
         ],
       );
     }
