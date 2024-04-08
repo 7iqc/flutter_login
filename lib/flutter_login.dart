@@ -15,7 +15,9 @@ import 'package:flutter_login/src/models/user_form_field.dart';
 import 'package:flutter_login/src/providers/auth.dart';
 import 'package:flutter_login/src/providers/login_messages.dart';
 import 'package:flutter_login/src/providers/login_theme.dart';
-import 'package:flutter_login/src/regex.dart';
+import 'package:flutter_login/src/utils/color_helper.dart';
+import 'package:flutter_login/src/utils/constants.dart';
+import 'package:flutter_login/src/utils/dart_helper.dart';
 import 'package:flutter_login/src/widgets/cards/auth_card_builder.dart';
 import 'package:flutter_login/src/widgets/fade_in.dart';
 import 'package:flutter_login/src/widgets/gradient_box.dart';
@@ -69,10 +71,19 @@ class LoginProvider {
   /// Default: true
   final bool animated;
 
+  /// Provide a list of errors to not display when a login has failed.
+  /// For example, if the login is cancelled and you don't want to show a error
+  /// message that the login is cancelled. If you provide the error message to this list
+  /// the error is not shown
+  ///
+  /// Default: null
+  final List<String>? errorsToExcludeFromErrorMessage;
+
   const LoginProvider({
     this.button,
     this.icon,
     required this.callback,
+    this.errorsToExcludeFromErrorMessage,
     this.label = '',
     this.providerNeedsSignUpCallback,
     this.animated = true,
@@ -152,7 +163,7 @@ class __HeaderState extends State<_Header> {
 
   /// https://stackoverflow.com/a/56997641/9449426
   double getEstimatedTitleHeight() {
-    if (DartHelper.isNullOrEmpty(widget.title)) {
+    if (isNullOrEmpty(widget.title)) {
       return 0.0;
     }
 
@@ -218,7 +229,7 @@ class __HeaderState extends State<_Header> {
     }
 
     Widget? title;
-    if (widget.titleTag != null && !DartHelper.isNullOrEmpty(widget.title)) {
+    if (widget.titleTag != null && !isNullOrEmpty(widget.title)) {
       title = HeroText(
         widget.title,
         key: kTitleKey,
@@ -228,7 +239,7 @@ class __HeaderState extends State<_Header> {
         style: theme.textTheme.displaySmall,
         viewState: ViewState.enlarged,
       );
-    } else if (!DartHelper.isNullOrEmpty(widget.title)) {
+    } else if (!isNullOrEmpty(widget.title)) {
       title = Text(
         widget.title!,
         key: kTitleKey,
@@ -307,6 +318,7 @@ class FlutterLogin extends StatefulWidget {
     this.headerWidget,
     this.onSwitchToAdditionalFields,
     this.initialIsoCode,
+    this.keyboardDismissBehavior = ScrollViewKeyboardDismissBehavior.manual,
     this.intlPhoneSelectorType = IntlPhoneSelectorType.dialog,
     this.isKeyboardVisible = false,
   })  : assert((logo is String?) || (logo is ImageProvider?)),
@@ -455,6 +467,8 @@ class FlutterLogin extends StatefulWidget {
   /// if not specified. This field will show ['US'] by default.
   final String? initialIsoCode;
 
+  final ScrollViewKeyboardDismissBehavior keyboardDismissBehavior;
+
   /// Sets [IntlPhoneSelectorType] of intl sign up country code selecter.
   ///
   /// Defaults to [IntlPhoneSelectorType.DIALOG].
@@ -465,7 +479,7 @@ class FlutterLogin extends StatefulWidget {
   final bool isKeyboardVisible;
 
   static String? defaultEmailValidator(String? value) {
-    if (value == null || value.isEmpty || !Regex.email.hasMatch(value)) {
+    if (value == null || value.isEmpty || !email.hasMatch(value)) {
       return 'Invalid email!';
     }
     return null;
@@ -687,6 +701,7 @@ class _FlutterLoginState extends State<FlutterLogin>
       primaryColorDark: primaryColorDark,
       cardTheme: theme.cardTheme.copyWith(
         clipBehavior: cardTheme.clipBehavior,
+        surfaceTintColor: cardTheme.surfaceTintColor,
         color: cardTheme.color ?? theme.cardColor,
         elevation: cardTheme.elevation ?? 12.0,
         margin: cardTheme.margin ?? const EdgeInsets.all(4.0),
@@ -825,6 +840,7 @@ class _FlutterLoginState extends State<FlutterLogin>
               ],
             ),
             SingleChildScrollView(
+              keyboardDismissBehavior: widget.keyboardDismissBehavior,
               padding: EdgeInsets.only(
                 bottom: widget.isKeyboardVisible ? 200 : 0,
               ),
@@ -837,6 +853,7 @@ class _FlutterLoginState extends State<FlutterLogin>
                       child: AuthCard(
                         key: authCardKey,
                         userType: widget.userType,
+                        keyboardDismissBehavior: widget.keyboardDismissBehavior,
                         padding: EdgeInsets.only(top: cardTopPosition),
                         loadingController: _loadingController,
                         userValidator: userValidator,

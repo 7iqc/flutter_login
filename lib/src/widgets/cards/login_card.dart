@@ -1,5 +1,8 @@
 part of 'auth_card_builder.dart';
 
+// https://stackoverflow.com/a/32686261/9449426
+final email = RegExp(r'^[^\s@]+@[^\s@]+\.[^\s@]+$');
+
 class _LoginCard extends StatefulWidget {
   const _LoginCard({
     super.key,
@@ -169,6 +172,7 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
     FocusScope.of(context).unfocus();
 
     final messages = Provider.of<LoginMessages>(context, listen: false);
+    final auth = Provider.of<Auth>(context, listen: false);
 
     if (!_formKey.currentState!.validate()) {
       return false;
@@ -177,7 +181,7 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
     _formKey.currentState!.save();
     await _submitController.forward();
     setState(() => _isSubmitting = true);
-    final auth = Provider.of<Auth>(context, listen: false);
+
     String? error;
 
     auth.authType = AuthType.userPassword;
@@ -219,10 +223,15 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
       }
     });
 
-    await _submitController.reverse();
+    if (context.mounted) {
+      await _submitController.reverse();
+    }
 
-    if (!DartHelper.isNullOrEmpty(error)) {
-      showErrorToast(context, messages.flushbarTitleError, error!);
+    if (!isNullOrEmpty(error)) {
+      if (context.mounted) {
+        showErrorToast(context, messages.flushbarTitleError, error!);
+      }
+
       Future.delayed(const Duration(milliseconds: 271), () {
         if (mounted) {
           setState(() => _showShadow = true);
@@ -245,11 +254,14 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
         _switchAuthMode();
         return false;
       } else if (!widget.loginAfterSignUp) {
-        showSuccessToast(
-          context,
-          messages.flushbarTitleSuccess,
-          messages.signUpSuccess,
-        );
+        if (context.mounted) {
+          showSuccessToast(
+            context,
+            messages.flushbarTitleSuccess,
+            messages.signUpSuccess,
+          );
+        }
+
         _switchAuthMode();
         setState(() => _isSubmitting = false);
         return false;
@@ -265,23 +277,27 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
     required LoginProvider loginProvider,
     AnimationController? control,
   }) async {
+    final messages = Provider.of<LoginMessages>(context, listen: false);
     if (!loginProvider.animated) {
       final String? error = await loginProvider.callback();
 
-      final messages = Provider.of<LoginMessages>(context, listen: false);
-
-      if (!DartHelper.isNullOrEmpty(error)) {
-        showErrorToast(context, messages.flushbarTitleError, error!);
+      if (!isNullOrEmpty(error)) {
+        // Only show error toast if error is not in exclusion list
+        if (loginProvider.errorsToExcludeFromErrorMessage == null ||
+            !loginProvider.errorsToExcludeFromErrorMessage!.contains(error)) {
+          if (context.mounted) {
+            showErrorToast(context, messages.flushbarTitleError, error!);
+          }
+        }
         return false;
       }
 
       return true;
     }
 
-    await control?.forward();
-
     final auth = Provider.of<Auth>(context, listen: false);
 
+    await control?.forward();
     auth.authType = AuthType.provider;
 
     String? error;
@@ -296,11 +312,17 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
       }
     });
 
-    final messages = Provider.of<LoginMessages>(context, listen: false);
-
-    if (!DartHelper.isNullOrEmpty(error)) {
+    if (!isNullOrEmpty(error)) {
       await control?.reverse();
-      showErrorToast(context, messages.flushbarTitleError, error!);
+
+      // Only show error toast if error is not in exclusion list
+      if (loginProvider.errorsToExcludeFromErrorMessage == null ||
+          !loginProvider.errorsToExcludeFromErrorMessage!.contains(error)) {
+        if (context.mounted) {
+          showErrorToast(context, messages.flushbarTitleError, error!);
+        }
+      }
+
       Future.delayed(const Duration(milliseconds: 271), () {
         if (mounted) {
           setState(() => _showShadow = true);
@@ -323,8 +345,15 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
           ),
         );
         await control?.reverse();
-        if (!DartHelper.isNullOrEmpty(error)) {
-          showErrorToast(context, messages.flushbarTitleError, error!);
+        if (!isNullOrEmpty(error)) {
+          // Only show error toast if error is not in exclusion list
+          if (loginProvider.errorsToExcludeFromErrorMessage == null ||
+              !loginProvider.errorsToExcludeFromErrorMessage!.contains(error)) {
+            if (context.mounted) {
+              showErrorToast(context, messages.flushbarTitleError, error!);
+            }
+          }
+
           Future.delayed(const Duration(milliseconds: 271), () {
             if (mounted) {
               setState(() => _showShadow = true);
@@ -336,7 +365,7 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
       await control?.reverse();
       widget.onSwitchSignUpAdditionalData();
     } else {
-      widget.onSubmitCompleted!();
+      widget.onSubmitCompleted?.call();
     }
     await control?.reverse();
     return true;
@@ -354,13 +383,10 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
       width: width,
       loadingController: widget.loadingController,
       interval: _nameTextFieldLoadingAnimationInterval,
-      labelText:
-          messages.userHint ?? TextFieldUtils.getLabelText(widget.userType),
-      autofillHints: _isSubmitting
-          ? null
-          : [TextFieldUtils.getAutofillHints(widget.userType)],
-      prefixIcon: TextFieldUtils.getPrefixIcon(widget.userType),
-      keyboardType: TextFieldUtils.getKeyboardType(widget.userType),
+      labelText: messages.userHint ?? getLabelText(widget.userType),
+      autofillHints: _isSubmitting ? null : [getAutofillHints(widget.userType)],
+      prefixIcon: getPrefixIcon(widget.userType),
+      keyboardType: getKeyboardType(widget.userType),
       textInputAction: TextInputAction.next,
       focusNode: _userFocusNode,
       onFieldSubmitted: (value) {
@@ -543,29 +569,9 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
     final iconProvidersList = <LoginProvider>[];
     for (final loginProvider in auth.loginProviders) {
       if (loginProvider.button != null) {
-        buttonProvidersList.add(
-          LoginProvider(
-            icon: loginProvider.icon,
-            label: loginProvider.label,
-            button: loginProvider.button,
-            callback: loginProvider.callback,
-            animated: loginProvider.animated,
-            providerNeedsSignUpCallback:
-                loginProvider.providerNeedsSignUpCallback,
-          ),
-        );
+        buttonProvidersList.add(loginProvider);
       } else if (loginProvider.icon != null) {
-        iconProvidersList.add(
-          LoginProvider(
-            icon: loginProvider.icon,
-            label: loginProvider.label,
-            button: loginProvider.button,
-            callback: loginProvider.callback,
-            animated: loginProvider.animated,
-            providerNeedsSignUpCallback:
-                loginProvider.providerNeedsSignUpCallback,
-          ),
-        );
+        iconProvidersList.add(loginProvider);
       }
     }
     if (buttonProvidersList.isNotEmpty) {
@@ -639,7 +645,7 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
                     loginProvider: loginProvider,
                   ),
                 ),
-                Text(loginProvider.label)
+                Text(loginProvider.label),
               ],
             ),
           ),
@@ -677,6 +683,14 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
           const Expanded(child: Divider()),
         ],
       ),
+    );
+  }
+
+  EdgeInsets fromRBL(double value) {
+    return EdgeInsets.only(
+      right: value,
+      bottom: value,
+      left: value,
     );
   }
 
@@ -737,7 +751,7 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
                     auth,
                   ),
                 ),
-                for (var e in auth.termsOfService)
+                for (final e in auth.termsOfService)
                   TermCheckbox(
                     termOfService: e,
                     validation: auth.isSignup,
@@ -746,7 +760,7 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
             ),
           ),
           Container(
-            padding: Paddings.fromRBL(cardPadding),
+            padding: fromRBL(cardPadding),
             width: cardWidth,
             child: Column(
               children: <Widget>[

@@ -6,12 +6,11 @@ import 'package:another_transformer_page_view/another_transformer_page_view.dart
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_login/flutter_login.dart';
-import 'package:flutter_login/src/constants.dart';
-import 'package:flutter_login/src/dart_helper.dart';
-import 'package:flutter_login/src/matrix.dart';
-import 'package:flutter_login/src/paddings.dart';
+import 'package:flutter_login/src/utils/constants.dart';
+import 'package:flutter_login/src/utils/dart_helper.dart';
+import 'package:flutter_login/src/utils/matrix.dart';
 import 'package:flutter_login/src/utils/text_field_utils.dart';
-import 'package:flutter_login/src/widget_helper.dart';
+import 'package:flutter_login/src/utils/widget_helper.dart';
 import 'package:flutter_login/src/widgets/animated_button.dart';
 import 'package:flutter_login/src/widgets/animated_icon.dart';
 import 'package:flutter_login/src/widgets/animated_text.dart';
@@ -53,7 +52,7 @@ class AuthCard extends StatefulWidget {
     required this.confirmSignupKeyboardType,
     this.introWidget,
     required this.initialIsoCode,
-    required this.intlPhoneSelectorType,
+    this.keyboardDismissBehavior = ScrollViewKeyboardDismissBehavior.manual,required this.intlPhoneSelectorType,
   });
 
   final EdgeInsets padding;
@@ -76,6 +75,9 @@ class AuthCard extends StatefulWidget {
   final bool navigateBackAfterRecovery;
 
   final bool scrollable;
+
+  final ScrollViewKeyboardDismissBehavior keyboardDismissBehavior;
+
   final TextInputType? confirmSignupKeyboardType;
   final Widget? introWidget;
   final String? initialIsoCode;
@@ -293,7 +295,7 @@ class AuthCardState extends State<AuthCard> with TickerProviderStateMixin {
     card = AnimatedBuilder(
       animation: _flipAnimation,
       builder: (context, child) => Transform(
-        transform: Matrix.perspective()..rotateX(_flipAnimation.value),
+        transform: perspective()..rotateX(_flipAnimation.value),
         alignment: Alignment.center,
         child: child,
       ),
@@ -368,7 +370,7 @@ class AuthCardState extends State<AuthCard> with TickerProviderStateMixin {
                 _changeCard(_additionalSignUpIndex),
             onSubmitCompleted: () {
               _forwardChangeRouteAnimation(_loginCardKey).then((_) {
-                widget.onSubmitCompleted!();
+                widget.onSubmitCompleted?.call();
               });
             },
             requireSignUpConfirmation: requireSignUpConfirmation,
@@ -422,7 +424,7 @@ class AuthCardState extends State<AuthCard> with TickerProviderStateMixin {
               } else if (widget.loginAfterSignUp) {
                 _forwardChangeRouteAnimation(_additionalSignUpCardKey)
                     .then((_) {
-                  widget.onSubmitCompleted!();
+                  widget.onSubmitCompleted?.call();
                 });
               } else {
                 _changeCard(_loginPageIndex);
@@ -456,7 +458,7 @@ class AuthCardState extends State<AuthCard> with TickerProviderStateMixin {
             onSubmitCompleted: () {
               if (widget.loginAfterSignUp) {
                 _forwardChangeRouteAnimation(_confirmSignUpCardKey).then((_) {
-                  widget.onSubmitCompleted!();
+                  widget.onSubmitCompleted?.call();
                 });
               } else {
                 _changeCard(_loginPageIndex);
@@ -498,6 +500,7 @@ class AuthCardState extends State<AuthCard> with TickerProviderStateMixin {
               child: Scrollbar(
                 controller: _scrollController,
                 child: SingleChildScrollView(
+                  keyboardDismissBehavior: widget.keyboardDismissBehavior,
                   controller: _scrollController,
                   child: _changeToCard(context, index),
                 ),
