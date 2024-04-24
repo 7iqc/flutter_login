@@ -139,7 +139,6 @@ class _AdditionalSignUpCardState extends State<_AdditionalSignUpCard>
             additionalSignupData: auth.additionalSignupData,
           ),
         );
-        break;
       case AuthType.userPassword:
         error = await auth.onSignup!(
           SignupData.fromSignupForm(
@@ -207,6 +206,7 @@ class _AdditionalSignUpCardState extends State<_AdditionalSignUpCard>
 
               initialIsoCode: widget.initialIsoCode,
               intlPhoneSelectorType: widget.intlPhoneSelectorType,
+              gender: formField.gender,
             ),
             const SizedBox(
               height: 5,

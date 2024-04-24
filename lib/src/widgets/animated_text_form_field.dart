@@ -57,6 +57,7 @@ class AnimatedTextFormField extends StatefulWidget {
     this.tooltip,
     required this.initialIsoCode,
     required this.intlPhoneSelectorType,
+    this.gender,
   }) : assert(
           (inertiaController == null && inertiaDirection == null) ||
               (inertiaController != null && inertiaDirection != null),
@@ -87,6 +88,7 @@ class AnimatedTextFormField extends StatefulWidget {
   final InlineSpan? tooltip;
   final String? initialIsoCode;
   final IntlPhoneSelectorType intlPhoneSelectorType;
+  final List<String>? gender;
 
   @override
   State<AnimatedTextFormField> createState() => _AnimatedTextFormFieldState();
@@ -386,7 +388,7 @@ class _AnimatedTextFormFieldState extends State<AnimatedTextFormField> {
               ),
       );
     } else if (widget.userType == LoginUserType.gender) {
-      final List<String> gender = ['Male', 'Female'];
+      final List<String> gender = widget.gender ?? ['Male', 'Female'];
       inputField = GestureDetector(
         onTap: () => showCupertinoModalPopup(
           context: context,

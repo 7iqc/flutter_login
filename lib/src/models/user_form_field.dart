@@ -25,6 +25,10 @@ class UserFormField {
   /// Defaults to LoginUserType.user
   final LoginUserType userType;
 
+  /// The gender list is used to show the selection options for the genders when using LoginUserType.gender
+  /// Defaults to ['Male', 'Female']
+  final List<String>? gender;
+
   final InlineSpan? tooltip;
 
   const UserFormField({
@@ -35,6 +39,7 @@ class UserFormField {
     this.icon,
     this.fieldValidator,
     this.userType = LoginUserType.name,
+    this.gender,
     this.tooltip,
   }) : displayName = displayName ?? keyName;
 }
