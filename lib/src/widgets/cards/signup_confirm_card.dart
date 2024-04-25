@@ -11,6 +11,7 @@ class _ConfirmSignupCard extends StatefulWidget {
     required this.keyboardType,
     required this.initialIsoCode,
     required this.intlPhoneSelectorType,
+    required this.autoValidateMode,
   });
 
   final bool loginAfterSignUp;
@@ -21,6 +22,7 @@ class _ConfirmSignupCard extends StatefulWidget {
   final TextInputType? keyboardType;
   final String? initialIsoCode;
   final IntlPhoneSelectorType intlPhoneSelectorType;
+  final AutovalidateMode autoValidateMode;
 
   @override
   _ConfirmSignupCardState createState() => _ConfirmSignupCardState();
@@ -159,6 +161,7 @@ class _ConfirmSignupCardState extends State<_ConfirmSignupCard>
       keyboardType: widget.keyboardType,
       initialIsoCode: widget.initialIsoCode,
       intlPhoneSelectorType: widget.intlPhoneSelectorType,
+      autoValidateMode: widget.autoValidateMode,
     );
   }
 

@@ -10,6 +10,7 @@ class _AdditionalSignUpCard extends StatefulWidget {
     required this.loadingController,
     required this.initialIsoCode,
     required this.intlPhoneSelectorType,
+    required this.autoValidateMode,
   }) {
     if (formFields.isEmpty) {
       throw RangeError('The formFields array must not be empty');
@@ -27,6 +28,7 @@ class _AdditionalSignUpCard extends StatefulWidget {
   final AnimationController loadingController;
   final String? initialIsoCode;
   final IntlPhoneSelectorType intlPhoneSelectorType;
+  final AutovalidateMode autoValidateMode;
 
   @override
   _AdditionalSignUpCardState createState() => _AdditionalSignUpCardState();
@@ -207,6 +209,7 @@ class _AdditionalSignUpCardState extends State<_AdditionalSignUpCard>
               initialIsoCode: widget.initialIsoCode,
               intlPhoneSelectorType: widget.intlPhoneSelectorType,
               gender: formField.gender,
+              autoValidateMode: widget.autoValidateMode,
             ),
             const SizedBox(
               height: 5,

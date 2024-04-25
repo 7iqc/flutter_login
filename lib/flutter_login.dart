@@ -317,6 +317,7 @@ class FlutterLogin extends StatefulWidget {
     this.initialIsoCode,
     this.keyboardDismissBehavior = ScrollViewKeyboardDismissBehavior.manual,
     this.intlPhoneSelectorType = IntlPhoneSelectorType.dialog,
+    this.autoValidateMode = AutovalidateMode.disabled,
     this.isKeyboardVisible = false,
   })  : assert((logo is String?) || (logo is ImageProvider?)),
         logo = logo is String ? AssetImage(logo) : logo as ImageProvider?;
@@ -470,6 +471,11 @@ class FlutterLogin extends StatefulWidget {
   ///
   /// Defaults to [IntlPhoneSelectorType.DIALOG].
   final IntlPhoneSelectorType intlPhoneSelectorType;
+
+  /// Sets [AutovalidateMode] of the form.
+  /// 
+  /// Defaults to [AutovalidateMode.disabled].
+  final AutovalidateMode autoValidateMode;
 
   /// If set to true, make the login window scrollable by adding bottom padding when keyboard is visible only
   /// Default: false
@@ -875,6 +881,7 @@ class _FlutterLoginState extends State<FlutterLogin>
                         introWidget: widget.headerWidget,
                         initialIsoCode: widget.initialIsoCode,
                         intlPhoneSelectorType: widget.intlPhoneSelectorType,
+                        autoValidateMode: widget.autoValidateMode,
                       ),
                     ),
                     Positioned(

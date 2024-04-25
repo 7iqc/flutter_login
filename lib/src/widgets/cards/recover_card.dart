@@ -11,6 +11,7 @@ class _RecoverCard extends StatefulWidget {
     required this.loadingController,
     required this.initialIsoCode,
     required this.intlPhoneSelectorType,
+    required this.autoValidateMode,
   });
 
   final FormFieldValidator<String>? userValidator;
@@ -23,6 +24,7 @@ class _RecoverCard extends StatefulWidget {
   final VoidCallback onSubmitCompleted;
   final String? initialIsoCode;
   final IntlPhoneSelectorType intlPhoneSelectorType;
+  final AutovalidateMode autoValidateMode;
 
   @override
   _RecoverCardState createState() => _RecoverCardState();
@@ -113,6 +115,7 @@ class _RecoverCardState extends State<_RecoverCard>
       onSaved: (value) => auth.email = value!,
       initialIsoCode: widget.initialIsoCode,
       intlPhoneSelectorType: widget.intlPhoneSelectorType,
+      autoValidateMode: widget.autoValidateMode,
     );
   }
 

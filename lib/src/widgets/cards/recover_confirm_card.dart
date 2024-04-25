@@ -8,6 +8,7 @@ class _ConfirmRecoverCard extends StatefulWidget {
     required this.onSubmitCompleted,
     required this.initialIsoCode,
     required this.intlPhoneSelectorType,
+    required this.autoValidateMode,
   });
 
   final FormFieldValidator<String> passwordValidator;
@@ -15,6 +16,7 @@ class _ConfirmRecoverCard extends StatefulWidget {
   final VoidCallback onSubmitCompleted;
   final String? initialIsoCode;
   final IntlPhoneSelectorType intlPhoneSelectorType;
+  final AutovalidateMode autoValidateMode;
 
   @override
   _ConfirmRecoverCardState createState() => _ConfirmRecoverCardState();
@@ -111,6 +113,7 @@ class _ConfirmRecoverCardState extends State<_ConfirmRecoverCard>
       onSaved: (value) => _code = value!,
       initialIsoCode: widget.initialIsoCode,
       intlPhoneSelectorType: widget.intlPhoneSelectorType,
+      autoValidateMode: widget.autoValidateMode,
     );
   }
 
@@ -131,6 +134,7 @@ class _ConfirmRecoverCardState extends State<_ConfirmRecoverCard>
       },
       initialIsoCode: widget.initialIsoCode,
       intlPhoneSelectorType: widget.intlPhoneSelectorType,
+      autoValidateMode: widget.autoValidateMode,
     );
   }
 
@@ -149,6 +153,7 @@ class _ConfirmRecoverCardState extends State<_ConfirmRecoverCard>
       },
       initialIsoCode: widget.initialIsoCode,
       intlPhoneSelectorType: widget.intlPhoneSelectorType,
+      autoValidateMode: widget.autoValidateMode,
     );
   }
 

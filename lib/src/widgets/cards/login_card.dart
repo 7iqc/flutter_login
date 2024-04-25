@@ -24,6 +24,7 @@ class _LoginCard extends StatefulWidget {
     this.introWidget,
     required this.initialIsoCode,
     required this.intlPhoneSelectorType,
+    required this.autoValidateMode,
   });
 
   final AnimationController loadingController;
@@ -44,6 +45,7 @@ class _LoginCard extends StatefulWidget {
   final Widget? introWidget;
   final String? initialIsoCode;
   final IntlPhoneSelectorType intlPhoneSelectorType;
+  final AutovalidateMode autoValidateMode;
 
   @override
   _LoginCardState createState() => _LoginCardState();
@@ -397,6 +399,7 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
       enabled: !_isSubmitting,
       initialIsoCode: widget.initialIsoCode,
       intlPhoneSelectorType: widget.intlPhoneSelectorType,
+      autoValidateMode: widget.autoValidateMode,
     );
   }
 
@@ -428,6 +431,7 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
       enabled: !_isSubmitting,
       initialIsoCode: widget.initialIsoCode,
       intlPhoneSelectorType: widget.intlPhoneSelectorType,
+      autoValidateMode: widget.autoValidateMode,
     );
   }
 
@@ -458,6 +462,7 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
       onSaved: (value) => auth.confirmPassword = value!,
       initialIsoCode: widget.initialIsoCode,
       intlPhoneSelectorType: widget.intlPhoneSelectorType,
+      autoValidateMode: widget.autoValidateMode,
     );
   }
 

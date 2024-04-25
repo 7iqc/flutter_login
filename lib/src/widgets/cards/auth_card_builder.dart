@@ -52,7 +52,9 @@ class AuthCard extends StatefulWidget {
     required this.confirmSignupKeyboardType,
     this.introWidget,
     required this.initialIsoCode,
-    this.keyboardDismissBehavior = ScrollViewKeyboardDismissBehavior.manual,required this.intlPhoneSelectorType,
+    this.keyboardDismissBehavior = ScrollViewKeyboardDismissBehavior.manual,
+    required this.intlPhoneSelectorType,
+    required this.autoValidateMode,
   });
 
   final EdgeInsets padding;
@@ -82,6 +84,7 @@ class AuthCard extends StatefulWidget {
   final Widget? introWidget;
   final String? initialIsoCode;
   final IntlPhoneSelectorType intlPhoneSelectorType;
+  final AutovalidateMode autoValidateMode;
 
   @override
   AuthCardState createState() => AuthCardState();
@@ -382,6 +385,7 @@ class AuthCardState extends State<AuthCard> with TickerProviderStateMixin {
             introWidget: widget.introWidget,
             initialIsoCode: widget.initialIsoCode,
             intlPhoneSelectorType: widget.intlPhoneSelectorType,
+            autoValidateMode: widget.autoValidateMode,
           ),
         );
       case _recoveryIndex:
@@ -401,6 +405,7 @@ class AuthCardState extends State<AuthCard> with TickerProviderStateMixin {
           },
           initialIsoCode: widget.initialIsoCode,
           intlPhoneSelectorType: widget.intlPhoneSelectorType,
+          autoValidateMode: widget.autoValidateMode,
         );
 
       case _additionalSignUpIndex:
@@ -432,6 +437,7 @@ class AuthCardState extends State<AuthCard> with TickerProviderStateMixin {
             },
             initialIsoCode: widget.initialIsoCode,
             intlPhoneSelectorType: widget.intlPhoneSelectorType,
+            autoValidateMode: widget.autoValidateMode,
           ),
         );
 
@@ -443,6 +449,7 @@ class AuthCardState extends State<AuthCard> with TickerProviderStateMixin {
           onSubmitCompleted: () => _changeCard(_loginPageIndex),
           initialIsoCode: widget.initialIsoCode,
           intlPhoneSelectorType: widget.intlPhoneSelectorType,
+          autoValidateMode: widget.autoValidateMode,
         );
 
       case _confirmSignup:
@@ -468,6 +475,7 @@ class AuthCardState extends State<AuthCard> with TickerProviderStateMixin {
             keyboardType: widget.confirmSignupKeyboardType,
             initialIsoCode: widget.initialIsoCode,
             intlPhoneSelectorType: widget.intlPhoneSelectorType,
+            autoValidateMode: widget.autoValidateMode,
           ),
         );
     }
