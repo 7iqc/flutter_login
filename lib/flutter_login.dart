@@ -473,7 +473,7 @@ class FlutterLogin extends StatefulWidget {
   final IntlPhoneSelectorType intlPhoneSelectorType;
 
   /// Sets [AutovalidateMode] of the form.
-  /// 
+  ///
   /// Defaults to [AutovalidateMode.disabled].
   final AutovalidateMode autoValidateMode;
 
@@ -712,6 +712,7 @@ class _FlutterLoginState extends State<FlutterLogin>
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
       ),
       inputDecorationTheme: theme.inputDecorationTheme.copyWith(
+        floatingLabelBehavior: inputTheme.floatingLabelBehavior,
         filled: inputTheme.filled,
         fillColor: inputTheme.fillColor ??
             Color.alphaBlend(
