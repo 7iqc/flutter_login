@@ -316,7 +316,13 @@ class _AnimatedTextFormFieldState extends State<AnimatedTextFormField> {
             );
             widget.onSaved?.call(phoneNumber.phoneNumber);
           },
-          validator: widget.validator,
+          errorMessage: widget.validator?.call(''),
+          // validator: (value) {
+          //   if (value == null || value.isEmpty) {
+          //     return 'Phone number is required';
+          //   }
+          //   return null;
+          // },
           autofillHints: widget.autofillHints,
           onInputChanged: (phoneNumber) {
             if (phoneNumber.phoneNumber != null &&
