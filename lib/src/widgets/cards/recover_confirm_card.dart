@@ -9,6 +9,7 @@ class _ConfirmRecoverCard extends StatefulWidget {
     required this.initialIsoCode,
     required this.intlPhoneSelectorType,
     required this.autoValidateMode,
+    required this.loginTheme,
   });
 
   final FormFieldValidator<String> passwordValidator;
@@ -17,6 +18,7 @@ class _ConfirmRecoverCard extends StatefulWidget {
   final String? initialIsoCode;
   final IntlPhoneSelectorType intlPhoneSelectorType;
   final AutovalidateMode autoValidateMode;
+  final LoginTheme? loginTheme;
 
   @override
   _ConfirmRecoverCardState createState() => _ConfirmRecoverCardState();
@@ -165,12 +167,17 @@ class _ConfirmRecoverCardState extends State<_ConfirmRecoverCard>
     );
   }
 
-  Widget _buildBackButton(ThemeData theme, LoginMessages messages) {
+  Widget _buildBackButton(
+      ThemeData theme, LoginMessages messages, LoginTheme? loginTheme) {
+    final calculatedTextColor =
+        (theme.cardTheme.color!.computeLuminance() < 0.5)
+            ? Colors.white
+            : theme.primaryColor;
     return MaterialButton(
       onPressed: !_isSubmitting ? widget.onBack : null,
       padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 4),
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-      textColor: theme.primaryColor,
+      textColor: loginTheme?.switchAuthTextColor ?? calculatedTextColor,
       child: Text(messages.goBackButton),
     );
   }
@@ -212,7 +219,7 @@ class _ConfirmRecoverCardState extends State<_ConfirmRecoverCard>
                 _buildConfirmPasswordField(textFieldWidth, messages),
                 const SizedBox(height: 26),
                 _buildSetPasswordButton(theme, messages),
-                _buildBackButton(theme, messages),
+                _buildBackButton(theme, messages, widget.loginTheme),
               ],
             ),
           ),

@@ -12,6 +12,7 @@ class _ConfirmSignupCard extends StatefulWidget {
     required this.initialIsoCode,
     required this.intlPhoneSelectorType,
     required this.autoValidateMode,
+    required this.loginTheme,
   });
 
   final bool loginAfterSignUp;
@@ -23,6 +24,7 @@ class _ConfirmSignupCard extends StatefulWidget {
   final String? initialIsoCode;
   final IntlPhoneSelectorType intlPhoneSelectorType;
   final AutovalidateMode autoValidateMode;
+  final LoginTheme? loginTheme;
 
   @override
   _ConfirmSignupCardState createState() => _ConfirmSignupCardState();
@@ -35,6 +37,9 @@ class _ConfirmSignupCardState extends State<_ConfirmSignupCard>
   // List of animation controller for every field
   late AnimationController _fieldSubmitController;
 
+  late final Timer? _timer;
+  int _resendCodeTimer = 60;
+
   var _isSubmitting = false;
   var _code = '';
 
@@ -46,12 +51,24 @@ class _ConfirmSignupCardState extends State<_ConfirmSignupCard>
       vsync: this,
       duration: const Duration(milliseconds: 1000),
     );
+    _timer = Timer.periodic(
+      const Duration(seconds: 1),
+      (_) => _resendCodeTimerMathFunction(),
+    );
   }
 
   @override
   void dispose() {
     _fieldSubmitController.dispose();
     super.dispose();
+  }
+
+  void _resendCodeTimerMathFunction() {
+    if (_resendCodeTimer > 0) {
+      setState(() {
+        _resendCodeTimer--;
+      });
+    }
   }
 
   Future<bool> _submit() async {
@@ -106,6 +123,7 @@ class _ConfirmSignupCardState extends State<_ConfirmSignupCard>
 
   Future<bool> _resendCode() async {
     FocusScope.of(context).unfocus();
+    _resendCodeTimer = 60;
 
     final auth = Provider.of<Auth>(context, listen: false);
     final messages = Provider.of<LoginMessages>(context, listen: false);
@@ -169,9 +187,11 @@ class _ConfirmSignupCardState extends State<_ConfirmSignupCard>
     return ScaleTransition(
       scale: widget.loadingController,
       child: MaterialButton(
-        onPressed: !_isSubmitting ? _resendCode : null,
+        onPressed: !_isSubmitting && _resendCodeTimer == 0 ? _resendCode : null,
         child: Text(
-          messages.resendCodeButton,
+          _resendCodeTimer != 0
+              ? '${messages.resendCodeTimerMessage} 00:${_resendCodeTimer < 10 ? '0' : ''}$_resendCodeTimer'
+              : messages.resendCodeButton,
           style: theme.textTheme.bodyMedium,
           textAlign: TextAlign.left,
         ),
@@ -190,14 +210,22 @@ class _ConfirmSignupCardState extends State<_ConfirmSignupCard>
     );
   }
 
-  Widget _buildBackButton(ThemeData theme, LoginMessages messages) {
+  Widget _buildBackButton(
+    ThemeData theme,
+    LoginMessages messages,
+    LoginTheme? loginTheme,
+  ) {
+    final calculatedTextColor =
+        (theme.cardTheme.color!.computeLuminance() < 0.5)
+            ? Colors.white
+            : theme.primaryColor;
     return ScaleTransition(
       scale: widget.loadingController,
       child: MaterialButton(
         onPressed: !_isSubmitting ? widget.onBackButtonTapped : null,
         padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 4),
         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-        textColor: theme.primaryColor,
+        textColor: loginTheme?.switchAuthTextColor ?? calculatedTextColor,
         child: Text(messages.goBackButton),
       ),
     );
@@ -240,7 +268,7 @@ class _ConfirmSignupCardState extends State<_ConfirmSignupCard>
                 const SizedBox(height: 10),
                 _buildResendCode(theme, messages),
                 _buildConfirmButton(theme, messages),
-                _buildBackButton(theme, messages),
+                _buildBackButton(theme, messages, widget.loginTheme),
               ],
             ),
           ),

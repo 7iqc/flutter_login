@@ -1,5 +1,6 @@
 library auth_card_builder;
 
+import 'dart:async';
 import 'dart:math';
 
 import 'package:another_transformer_page_view/another_transformer_page_view.dart';
@@ -450,6 +451,7 @@ class AuthCardState extends State<AuthCard> with TickerProviderStateMixin {
           initialIsoCode: widget.initialIsoCode,
           intlPhoneSelectorType: widget.intlPhoneSelectorType,
           autoValidateMode: widget.autoValidateMode,
+          loginTheme: widget.loginTheme,
         );
 
       case _confirmSignup:
@@ -476,6 +478,7 @@ class AuthCardState extends State<AuthCard> with TickerProviderStateMixin {
             initialIsoCode: widget.initialIsoCode,
             intlPhoneSelectorType: widget.intlPhoneSelectorType,
             autoValidateMode: widget.autoValidateMode,
+            loginTheme: widget.loginTheme,
           ),
         );
     }
