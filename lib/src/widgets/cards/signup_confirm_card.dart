@@ -60,6 +60,7 @@ class _ConfirmSignupCardState extends State<_ConfirmSignupCard>
   @override
   void dispose() {
     _fieldSubmitController.dispose();
+    _timer?.cancel();
     super.dispose();
   }
 
