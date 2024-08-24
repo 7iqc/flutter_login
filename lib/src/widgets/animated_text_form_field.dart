@@ -460,6 +460,10 @@ class _AnimatedTextFormFieldState extends State<AnimatedTextFormField> {
       );
     } else {
       inputField = TextFormField(
+        textCapitalization: widget.userType == LoginUserType.firstName ||
+                widget.userType == LoginUserType.lastName
+            ? TextCapitalization.sentences
+            : TextCapitalization.none,
         cursorColor: theme.primaryColor,
         controller: widget.controller,
         focusNode: widget.focusNode,
