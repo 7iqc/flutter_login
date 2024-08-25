@@ -38,7 +38,7 @@ class _ConfirmSignupCardState extends State<_ConfirmSignupCard>
   late AnimationController _fieldSubmitController;
 
   late final Timer? _timer;
-  int _resendCodeTimer = 60;
+  int _resendCodeTimer = 60 * 5;
 
   var _isSubmitting = false;
   var _code = '';
@@ -70,6 +70,13 @@ class _ConfirmSignupCardState extends State<_ConfirmSignupCard>
         _resendCodeTimer--;
       });
     }
+  }
+
+  String _resendCodeTimerMessage({required LoginMessages messages}) {
+    final minutes = Duration(seconds: _resendCodeTimer).inMinutes.remainder(60);
+    final seconds = Duration(seconds: _resendCodeTimer).inSeconds.remainder(60);
+
+    return '${messages.resendCodeTimerMessage} 0$minutes:${seconds < 10 ? '0' : ''}$seconds';
   }
 
   Future<bool> _submit() async {
@@ -124,7 +131,7 @@ class _ConfirmSignupCardState extends State<_ConfirmSignupCard>
 
   Future<bool> _resendCode() async {
     FocusScope.of(context).unfocus();
-    _resendCodeTimer = 60;
+    _resendCodeTimer = 60 * 5;
 
     final auth = Provider.of<Auth>(context, listen: false);
     final messages = Provider.of<LoginMessages>(context, listen: false);
@@ -191,7 +198,7 @@ class _ConfirmSignupCardState extends State<_ConfirmSignupCard>
         onPressed: !_isSubmitting && _resendCodeTimer == 0 ? _resendCode : null,
         child: Text(
           _resendCodeTimer != 0
-              ? '${messages.resendCodeTimerMessage} 00:${_resendCodeTimer < 10 ? '0' : ''}$_resendCodeTimer'
+              ? _resendCodeTimerMessage(messages: messages)
               : messages.resendCodeButton,
           style: theme.textTheme.bodyMedium,
           textAlign: TextAlign.left,
