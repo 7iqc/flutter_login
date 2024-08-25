@@ -32,6 +32,9 @@ class _ConfirmRecoverCardState extends State<_ConfirmRecoverCard>
   final _confirmPasswordFocusNode = FocusNode();
   final _passwordController = TextEditingController();
 
+  late final Timer? _timer;
+  int _resendCodeTimer = 60 * 5;
+
   var _isSubmitting = false;
   var _code = '';
 
@@ -45,12 +48,18 @@ class _ConfirmRecoverCardState extends State<_ConfirmRecoverCard>
       vsync: this,
       duration: const Duration(milliseconds: 1000),
     );
+
+    _timer = Timer.periodic(
+      const Duration(seconds: 1),
+      (_) => _resendCodeTimerMathFunction(),
+    );
   }
 
   @override
   void dispose() {
     super.dispose();
     _submitController.dispose();
+    _timer?.cancel();
   }
 
   Future<bool> _submit() async {
@@ -119,6 +128,69 @@ class _ConfirmRecoverCardState extends State<_ConfirmRecoverCard>
     );
   }
 
+  void _resendCodeTimerMathFunction() {
+    if (_resendCodeTimer > 0) {
+      setState(() {
+        _resendCodeTimer--;
+      });
+    }
+  }
+
+  String _resendCodeTimerMessage({required LoginMessages messages}) {
+    final minutes = Duration(seconds: _resendCodeTimer).inMinutes.remainder(60);
+    final seconds = Duration(seconds: _resendCodeTimer).inSeconds.remainder(60);
+
+    return '${messages.resendCodeTimerMessage} 0$minutes:${seconds < 10 ? '0' : ''}$seconds';
+  }
+
+  Future<bool> _resendCode() async {
+    FocusScope.of(context).unfocus();
+    _resendCodeTimer = 60 * 5;
+
+    final auth = Provider.of<Auth>(context, listen: false);
+    final messages = Provider.of<LoginMessages>(context, listen: false);
+
+    await _submitController.forward();
+    setState(() => _isSubmitting = true);
+
+    final error = await auth.onRecoverPassword!(auth.email);
+
+    if (error != null) {
+      if (context.mounted) {
+        showErrorToast(context, messages.flushbarTitleError, error);
+      }
+
+      setState(() => _isSubmitting = false);
+      await _submitController.reverse();
+      return false;
+    }
+
+    if (context.mounted) {
+      showSuccessToast(
+        context,
+        messages.flushbarTitleSuccess,
+        messages.resendCodeSuccess,
+      );
+    }
+
+    setState(() => _isSubmitting = false);
+    await _submitController.reverse();
+    return true;
+  }
+
+  Widget _buildResendCode(ThemeData theme, LoginMessages messages) {
+    return MaterialButton(
+      onPressed: !_isSubmitting && _resendCodeTimer == 0 ? _resendCode : null,
+      child: Text(
+        _resendCodeTimer != 0
+            ? _resendCodeTimerMessage(messages: messages)
+            : messages.resendCodeButton,
+        style: theme.textTheme.bodyMedium,
+        textAlign: TextAlign.left,
+      ),
+    );
+  }
+
   Widget _buildPasswordField(double width, LoginMessages messages) {
     return AnimatedPasswordTextFormField(
       animatedWidth: width,
@@ -168,7 +240,10 @@ class _ConfirmRecoverCardState extends State<_ConfirmRecoverCard>
   }
 
   Widget _buildBackButton(
-      ThemeData theme, LoginMessages messages, LoginTheme? loginTheme) {
+    ThemeData theme,
+    LoginMessages messages,
+    LoginTheme? loginTheme,
+  ) {
     final calculatedTextColor =
         (theme.cardTheme.color!.computeLuminance() < 0.5)
             ? Colors.white
@@ -218,6 +293,7 @@ class _ConfirmRecoverCardState extends State<_ConfirmRecoverCard>
                 const SizedBox(height: 20),
                 _buildConfirmPasswordField(textFieldWidth, messages),
                 const SizedBox(height: 26),
+                _buildResendCode(theme, messages),
                 _buildSetPasswordButton(theme, messages),
                 _buildBackButton(theme, messages, widget.loginTheme),
               ],
