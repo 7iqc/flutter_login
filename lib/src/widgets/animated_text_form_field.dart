@@ -425,9 +425,7 @@ class _AnimatedTextFormFieldState extends State<AnimatedTextFormField> {
                   ),
                 ),
                 onSelectedItemChanged: (int selectedItem) {
-                  setState(() {
-                    widget.controller?.text = gender[selectedItem];
-                  });
+                  widget.controller?.text = gender[selectedItem];
                 },
                 children: List<Widget>.generate(gender.length, (int index) {
                   return Center(
@@ -441,6 +439,64 @@ class _AnimatedTextFormFieldState extends State<AnimatedTextFormField> {
             ),
           ),
         ),
+        child: TextFormField(
+          cursorColor: theme.primaryColor,
+          controller: widget.controller,
+          focusNode: widget.focusNode,
+          decoration: _getInputDecoration(theme),
+          keyboardType: widget.keyboardType,
+          textInputAction: widget.textInputAction,
+          obscureText: widget.obscureText,
+          onFieldSubmitted: widget.onFieldSubmitted,
+          onSaved: widget.onSaved,
+          validator: widget.validator,
+          enabled: false,
+          autocorrect: widget.autocorrect,
+          autofillHints: widget.autofillHints,
+          autovalidateMode: widget.autoValidateMode,
+        ),
+      );
+    } else if (widget.userType == LoginUserType.birthdate) {
+      inputField = GestureDetector(
+        onTap: () {
+          final selectedDate =
+              widget.controller != null && widget.controller!.text.isEmpty
+                  ? DateTime.now()
+                  : DateTime.tryParse(widget.controller!.text);
+          showModalBottomSheet(
+            context: context,
+            builder: (BuildContext context) {
+              return Container(
+                height: 216,
+                padding: const EdgeInsets.only(top: 6.0),
+                margin: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom,
+                ),
+                decoration: BoxDecoration(
+                  color: CupertinoColors.systemBackground.resolveFrom(context),
+                  borderRadius:
+                      const BorderRadius.vertical(top: Radius.circular(12)),
+                ),
+                child: CupertinoDatePicker(
+                  mode: CupertinoDatePickerMode.date,
+                  onDateTimeChanged: (picked) {
+                    widget.controller?.text = picked.toString().split(' ')[0];
+                  },
+                  initialDateTime: selectedDate,
+                  maximumDate: DateTime.now(),
+                ),
+              );
+            },
+          ).whenComplete(
+            () {
+              if (widget.controller != null &&
+                  widget.controller!.text.isEmpty) {
+                final picked = DateTime.now();
+                widget.controller?.text = picked.toString().split(' ')[0];
+              }
+            },
+          );
+        },
         child: TextFormField(
           cursorColor: theme.primaryColor,
           controller: widget.controller,
