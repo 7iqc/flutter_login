@@ -400,6 +400,7 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
       initialIsoCode: widget.initialIsoCode,
       intlPhoneSelectorType: widget.intlPhoneSelectorType,
       autoValidateMode: widget.autoValidateMode,
+      intlPhoneSearchHint: messages.intlPhoneSearchHint,
     );
   }
 
@@ -432,6 +433,7 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
       initialIsoCode: widget.initialIsoCode,
       intlPhoneSelectorType: widget.intlPhoneSelectorType,
       autoValidateMode: widget.autoValidateMode,
+      intlPhoneSearchHint: messages.intlPhoneSearchHint,
     );
   }
 
@@ -463,6 +465,7 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
       initialIsoCode: widget.initialIsoCode,
       intlPhoneSelectorType: widget.intlPhoneSelectorType,
       autoValidateMode: widget.autoValidateMode,
+      intlPhoneSearchHint: messages.intlPhoneSearchHint,
     );
   }
 

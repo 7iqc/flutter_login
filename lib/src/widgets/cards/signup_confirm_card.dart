@@ -188,6 +188,7 @@ class _ConfirmSignupCardState extends State<_ConfirmSignupCard>
       initialIsoCode: widget.initialIsoCode,
       intlPhoneSelectorType: widget.intlPhoneSelectorType,
       autoValidateMode: widget.autoValidateMode,
+      intlPhoneSearchHint: messages.intlPhoneSearchHint,
     );
   }
 

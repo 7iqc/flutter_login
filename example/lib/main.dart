@@ -4,6 +4,18 @@ import 'package:flutter_login_example/dashboard_screen.dart';
 import 'package:flutter_login_example/login_screen.dart';
 import 'package:flutter_login_example/transition_route_observer.dart';
 
+const Color orange = Color(0xFFF6911E);
+const Color blue = Color(0xFF3852A3);
+const Color blueDark = Color.fromARGB(255, 37, 55, 109);
+const Color grey = Color(0xFFAAAAAA);
+const Color bg = Color(0xFFefefef);
+const Color yellow = Color(0xFFEB9F17);
+const Color green = Color(0xFF53BE5E);
+const Color divBlue = Color(0xFF5f82ff);
+const Color white = Colors.white;
+const Color darkBg = Color(0xFF161620);
+const Color darkCont = Color(0xFF1c1c28);
+const Color whatsGreen = Color(0xFF45b243);
 void main() {
   SystemChrome.setSystemUIOverlayStyle(
     SystemUiOverlayStyle(
@@ -56,6 +68,23 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.deepPurple)
             .copyWith(secondary: Colors.orange),
       ),
+      // darkTheme: ThemeData.dark().copyWith(
+      //   cardColor: darkCont,
+      //   colorScheme: ColorScheme.fromSeed(
+      //     surfaceTint: darkCont,
+      //     seedColor: blue,
+      //     brightness: Brightness.dark,
+      //   ),
+      //   scaffoldBackgroundColor: darkBg,
+      //   cupertinoOverrideTheme: const CupertinoThemeData(
+      //     brightness: Brightness.dark,
+      //     scaffoldBackgroundColor: darkBg,
+      //     barBackgroundColor: darkBg,
+      //   ),
+      //   textSelectionTheme: const TextSelectionThemeData(
+      //     cursorColor: orange,
+      //   ),
+      // ),
       navigatorObservers: [TransitionRouteObserver()],
       initialRoute: LoginScreen.routeName,
       routes: {

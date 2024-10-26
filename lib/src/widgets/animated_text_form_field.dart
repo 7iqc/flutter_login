@@ -59,6 +59,7 @@ class AnimatedTextFormField extends StatefulWidget {
     required this.intlPhoneSelectorType,
     required this.autoValidateMode,
     this.gender,
+    this.intlPhoneSearchHint,
   }) : assert(
           (inertiaController == null && inertiaDirection == null) ||
               (inertiaController != null && inertiaDirection != null),
@@ -91,6 +92,7 @@ class AnimatedTextFormField extends StatefulWidget {
   final IntlPhoneSelectorType intlPhoneSelectorType;
   final List<String>? gender;
   final AutovalidateMode autoValidateMode;
+  final String? intlPhoneSearchHint;
 
   @override
   State<AnimatedTextFormField> createState() => _AnimatedTextFormFieldState();
@@ -299,9 +301,10 @@ class _AnimatedTextFormFieldState extends State<AnimatedTextFormField> {
           cursorColor: theme.primaryColor,
           focusNode: widget.focusNode,
           inputDecoration: _getInputDecoration(theme),
-          searchBoxDecoration: const InputDecoration(
-            contentPadding: EdgeInsets.only(left: 20),
-            labelText: 'Search by country name or dial code',
+          searchBoxDecoration: InputDecoration(
+            contentPadding: const EdgeInsets.only(left: 20),
+            labelText: widget.intlPhoneSearchHint ??
+                'Search by country name or dial code',
           ),
           keyboardType: widget.keyboardType ?? TextInputType.phone,
           onFieldSubmitted: widget.onFieldSubmitted,
@@ -614,6 +617,7 @@ class AnimatedPasswordTextFormField extends StatefulWidget {
     required this.initialIsoCode,
     required this.intlPhoneSelectorType,
     required this.autoValidateMode,
+    this.intlPhoneSearchHint,
   }) : assert(
           (inertiaController == null && inertiaDirection == null) ||
               (inertiaController != null && inertiaDirection != null),
@@ -637,6 +641,7 @@ class AnimatedPasswordTextFormField extends StatefulWidget {
   final String? initialIsoCode;
   final IntlPhoneSelectorType intlPhoneSelectorType;
   final AutovalidateMode autoValidateMode;
+  final String? intlPhoneSearchHint;
 
   @override
   State<AnimatedPasswordTextFormField> createState() =>
@@ -699,6 +704,7 @@ class _AnimatedPasswordTextFormFieldState
       initialIsoCode: widget.initialIsoCode,
       intlPhoneSelectorType: widget.intlPhoneSelectorType,
       autoValidateMode: widget.autoValidateMode,
+      intlPhoneSearchHint: widget.intlPhoneSearchHint,
     );
   }
 }

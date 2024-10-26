@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart' show timeDilation;
 import 'package:flutter_login/flutter_login.dart';
@@ -29,15 +27,12 @@ class LoginScreen extends StatelessWidget {
   }
 
   Future<String?> _signupUser(SignupData data) {
-    inspect(data);
-    print(data);
     return Future.delayed(loginTime).then((_) {
       return null;
     });
   }
 
   Future<String?> _recoverPassword(String name) {
-    print('object');
     return Future.delayed(loginTime).then((_) {
       // if (!mockUsers.containsKey(name)) {
       //   return 'User not exists';
@@ -47,8 +42,12 @@ class LoginScreen extends StatelessWidget {
   }
 
   Future<String?> _signupConfirm(String error, LoginData data) {
-    inspect(data);
-    print(error);
+    return Future.delayed(loginTime).then((_) {
+      return null;
+    });
+  }
+
+  Future<String?> _resendCode(SignupData data) {
     return Future.delayed(loginTime).then((_) {
       return null;
     });
@@ -100,6 +99,7 @@ class LoginScreen extends StatelessWidget {
       navigateBackAfterRecovery: true,
       onConfirmRecover: _signupConfirm,
       onConfirmSignup: _signupConfirm,
+      onResendCode: _resendCode,
       loginAfterSignUp: false,
       autoValidateMode: AutovalidateMode.onUserInteraction,
       // loginProviders: [
@@ -150,10 +150,20 @@ class LoginScreen extends StatelessWidget {
           userType: LoginUserType.gender,
         ),
         const UserFormField(
-          keyName: 'Username',
+          keyName: 'birthdate',
+          userType: LoginUserType.birthdate,
+          displayName: 'Birthdate',
           icon: Icon(FontAwesomeIcons.userLarge),
         ),
-        const UserFormField(keyName: 'Name'),
+        const UserFormField(
+          keyName: 'Username',
+          userType: LoginUserType.firstName,
+          icon: Icon(FontAwesomeIcons.userLarge),
+        ),
+        const UserFormField(
+          keyName: 'Name',
+          userType: LoginUserType.lastName,
+        ),
         const UserFormField(keyName: 'Surname'),
         UserFormField(
           keyName: 'phone_number',
@@ -276,7 +286,7 @@ class LoginScreen extends StatelessWidget {
         // if (!value!.contains('@') || !value.endsWith('.com')) {
         //   return "Email must contain '@' and end with '.com'";
         // }
-        return null;
+        return 'null';
       },
       passwordValidator: (value) {
         if (value!.isEmpty) {

@@ -116,6 +116,7 @@ class _RecoverCardState extends State<_RecoverCard>
       initialIsoCode: widget.initialIsoCode,
       intlPhoneSelectorType: widget.intlPhoneSelectorType,
       autoValidateMode: widget.autoValidateMode,
+      intlPhoneSearchHint: messages.intlPhoneSearchHint,
     );
   }
 

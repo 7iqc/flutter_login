@@ -37,6 +37,7 @@ class LoginMessages with ChangeNotifier {
     this.confirmRecoverSuccess = defaultConfirmRecoverSuccess,
     this.recoverCodePasswordDescription = defaultRecoverCodePasswordDescription,
     this.resendCodeTimerMessage = defaultResendCodeTimerMessage,
+    this.intlPhoneSearchHint = defaultIntlPhoneSearchHint,
   });
 
   static const defaultPasswordHint = 'Password';
@@ -79,6 +80,7 @@ class LoginMessages with ChangeNotifier {
   static const defaultConfirmSignupButton = 'CONFIRM';
   static const defaultConfirmSignupSuccess = 'Account confirmed.';
   static const defaultResendCodeTimerMessage = 'Resend code after';
+  static const defaultIntlPhoneSearchHint = 'Resend code after';
 
   /// Hint text of the userHint [TextField]
   /// Default will be selected based on userType
@@ -184,4 +186,7 @@ class LoginMessages with ChangeNotifier {
   /// Description in confirmation code form, shown when the resend code timer is running
   /// callback is provided
   final String resendCodeTimerMessage;
+
+  /// The hint of the intlPhoneNumberSearch TextField
+  final String intlPhoneSearchHint;
 }
