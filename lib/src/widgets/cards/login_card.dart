@@ -414,7 +414,7 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
           ? null
           : (auth.isLogin
               ? [AutofillHints.password]
-              : [AutofillHints.newPassword]),
+              : [AutofillHints.password]),
       controller: _passController,
       textInputAction:
           auth.isLogin ? TextInputAction.done : TextInputAction.next,
