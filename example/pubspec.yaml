@@ -19,7 +19,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  lint: ^2.1.2
+  very_good_analysis: ^8.0.0
 
 flutter:
   uses-material-design: true
@@ -28,6 +28,7 @@ flutter:
     - assets/images/ecorp.png
     - assets/images/ecorp-lightblue.png
     - assets/images/ecorp-lightgreen.png
+    - assets/images/bgr.jpg
 
   fonts:
     - family: OpenSans
