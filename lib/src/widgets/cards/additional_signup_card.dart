@@ -210,6 +210,8 @@ class _AdditionalSignUpCardState extends State<_AdditionalSignUpCard>
               intlPhoneSelectorType: widget.intlPhoneSelectorType,
               gender: formField.gender,
               autoValidateMode: widget.autoValidateMode,
+              onAutoValidateDisabledFields: () =>
+                  _formCompleteSignupKey.currentState?.validate(),
             ),
             const SizedBox(
               height: 5,

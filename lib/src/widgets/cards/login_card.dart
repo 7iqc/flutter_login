@@ -401,6 +401,7 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
       intlPhoneSelectorType: widget.intlPhoneSelectorType,
       autoValidateMode: widget.autoValidateMode,
       intlPhoneSearchHint: messages.intlPhoneSearchHint,
+      onAutoValidateDisabledFields: () => _formKey.currentState?.validate(),
     );
   }
 

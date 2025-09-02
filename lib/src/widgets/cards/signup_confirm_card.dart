@@ -189,6 +189,8 @@ class _ConfirmSignupCardState extends State<_ConfirmSignupCard>
       intlPhoneSelectorType: widget.intlPhoneSelectorType,
       autoValidateMode: widget.autoValidateMode,
       intlPhoneSearchHint: messages.intlPhoneSearchHint,
+      onAutoValidateDisabledFields: () =>
+          _formRecoverKey.currentState?.validate(),
     );
   }
 

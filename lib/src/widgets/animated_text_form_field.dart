@@ -60,6 +60,7 @@ class AnimatedTextFormField extends StatefulWidget {
     required this.autoValidateMode,
     this.gender,
     this.intlPhoneSearchHint,
+    this.onAutoValidateDisabledFields,
   }) : assert(
           (inertiaController == null && inertiaDirection == null) ||
               (inertiaController != null && inertiaDirection != null),
@@ -93,6 +94,7 @@ class AnimatedTextFormField extends StatefulWidget {
   final List<String>? gender;
   final AutovalidateMode autoValidateMode;
   final String? intlPhoneSearchHint;
+  final VoidCallback? onAutoValidateDisabledFields;
 
   @override
   State<AnimatedTextFormField> createState() => _AnimatedTextFormFieldState();
@@ -411,7 +413,9 @@ class _AnimatedTextFormFieldState extends State<AnimatedTextFormField> {
               bottom: MediaQuery.of(context).viewInsets.bottom,
             ),
             decoration: BoxDecoration(
-              color: CupertinoColors.systemBackground.resolveFrom(context),
+              color: Theme.of(context).brightness == Brightness.light
+                  ? Colors.white
+                  : Color(0xFF1c1c28),
               borderRadius:
                   const BorderRadius.vertical(top: Radius.circular(12)),
             ),
@@ -441,7 +445,11 @@ class _AnimatedTextFormFieldState extends State<AnimatedTextFormField> {
               ),
             ),
           ),
-        ),
+        ).then((value) {
+          if (widget.autoValidateMode != AutovalidateMode.disabled) {
+            widget.onAutoValidateDisabledFields?.call();
+          }
+        }),
         child: TextFormField(
           cursorColor: theme.primaryColor,
           controller: widget.controller,
@@ -476,7 +484,9 @@ class _AnimatedTextFormFieldState extends State<AnimatedTextFormField> {
                   bottom: MediaQuery.of(context).viewInsets.bottom,
                 ),
                 decoration: BoxDecoration(
-                  color: CupertinoColors.systemBackground.resolveFrom(context),
+                  color: Theme.of(context).brightness == Brightness.light
+                      ? Colors.white
+                      : Color(0xFF1c1c28),
                   borderRadius:
                       const BorderRadius.vertical(top: Radius.circular(12)),
                 ),
@@ -496,6 +506,9 @@ class _AnimatedTextFormFieldState extends State<AnimatedTextFormField> {
                   widget.controller!.text.isEmpty) {
                 final picked = DateTime.now();
                 widget.controller?.text = picked.toString().split(' ')[0];
+              }
+              if (widget.autoValidateMode != AutovalidateMode.disabled) {
+                widget.onAutoValidateDisabledFields?.call();
               }
             },
           );
