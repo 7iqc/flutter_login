@@ -145,15 +145,27 @@ class LoginScreen extends StatelessWidget {
       //   ),
       // ],
       additionalSignupFields: [
-        const UserFormField(
+        UserFormField(
           keyName: 'gender',
           userType: LoginUserType.gender,
+          fieldValidator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Gender is required';
+            }
+            return null;
+          },
         ),
-        const UserFormField(
+        UserFormField(
           keyName: 'birthdate',
           userType: LoginUserType.birthdate,
           displayName: 'Birthdate',
-          icon: Icon(FontAwesomeIcons.userLarge),
+          fieldValidator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Birthdate is required';
+            }
+            return null;
+          },
+          icon: const Icon(FontAwesomeIcons.userLarge),
         ),
         const UserFormField(
           keyName: 'Username',

@@ -126,6 +126,8 @@ class _ConfirmRecoverCardState extends State<_ConfirmRecoverCard>
       intlPhoneSelectorType: widget.intlPhoneSelectorType,
       autoValidateMode: widget.autoValidateMode,
       intlPhoneSearchHint: messages.intlPhoneSearchHint,
+      onAutoValidateDisabledFields: () =>
+          _formRecoverKey.currentState?.validate(),
     );
   }
 

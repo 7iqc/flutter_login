@@ -33,6 +33,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Login Demo',
+      darkTheme: ThemeData.dark().copyWith(
+        cardColor: darkCont,
+        colorScheme: ColorScheme.fromSeed(
+          surfaceTint: darkCont,
+          seedColor: blue,
+          brightness: Brightness.dark,
+        ),
+      ),
       theme: ThemeData(
         textSelectionTheme:
             const TextSelectionThemeData(cursorColor: Colors.orange),
